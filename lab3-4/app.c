@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "teste.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -26,6 +27,7 @@ int main()
 	add(&v, createOffer("city_break", "China", d7, 2400));
 	add(&v, createOffer("mare", "BoraBora", d8, 4200));
 	add(&v, createOffer("city_break", "Paris", d9, 500));
-//	aplicatie(&v);
+	aplicatie(&v);
+	destroy(&v);
 	return 0;
 }
