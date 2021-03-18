@@ -87,14 +87,18 @@ void filter_by_price(MyVector* v, int p);
 */
 void changeOffer(ElemType* o1, ElemType* o2);
 
+int crescator(ElemType* a, ElemType* b);
+int descrescator(ElemType* a, ElemType* b);
+void sort(MyVector* v, int(*compare)(void*, void*));
+
 /*Ascending order by price 
 * pre:-
 * post:vector has only offers with that destination
 */
-void ascending_order_by_price_and_destination(MyVector* v, char* d);
+MyVector* ascending_order_by_price_and_destination(MyVector* v, char* d);
 
 /*Descending order by price
 * pre:-
 * post:vector has only offers with that destination
 */
-void descending_order_by_price_and_destination(MyVector* v, char* d);
+MyVector* descending_order_by_price_and_destination(MyVector* v, char* d);

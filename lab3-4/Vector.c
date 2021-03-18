@@ -1,7 +1,12 @@
+#define _CRTDBG_MAP_ALLOC  
 #include "Vector.h"
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <crtdbg.h>
+#include <sal.h>
+//_Post_ _Notnull_ ElemType* o1;
+//_Post_ _Notnull_ ElemType* o2;
 
 MyVector createEmpty()
 {
@@ -28,12 +33,12 @@ ElemType get(MyVector* v, int poz)
 	return v->elems[poz];
 }
 
-ElemType set(MyVector* v, int poz, Offer o)
+/*ElemType set(MyVector* v, int poz, Offer o)
 {
 	ElemType rez = v->elems[poz];
 	v->elems[poz] = o;
 	return rez;
-} 
+} */
 
 int size(MyVector* v)
 {
@@ -80,17 +85,12 @@ void del(MyVector* v, ElemType el)
 			pos = i;
 		}
 	}
-	ElemType* nElems = malloc(sizeof(ElemType) * v->lg-1);
-	//copy elems
-	for (int i = 0; i <=pos; i++) {
-		nElems[i] = v->elems[i];
-	}
+	destroyOffer(&v->elems[pos]);
 	for (int i = pos; i < v->lg - 1; i++)
 	{
-		nElems[i] = v->elems[i + 1];
+		v->elems[i] = v->elems[i + 1];
 	}
-	v->elems = nElems;
-	v->lg = v->lg - 1;
+	v->lg--;
 }
 
 void update(MyVector* v, ElemType el, ElemType el_nou)
@@ -99,23 +99,35 @@ void update(MyVector* v, ElemType el, ElemType el_nou)
 	{
 		if ((strcmp(v->elems[i].destination, el.destination) == 0) && (strcmp(v->elems[i].type, el.type) == 0) && (v->elems[i].date.day == el.date.day) && (v->elems[i].date.month == el.date.month) && (v->elems[i].date.year == el.date.year) && (v->elems[i].price == el.price))
 		{
-			v->elems[i] = el_nou;
+			destroyOffer(&v->elems[i]);
+			v->elems[i] = copyOffer(&el_nou);
 		}
 	}
 
 }
 void filter_by_destination(MyVector* v, char* d)
 {
-	ElemType* nElems = malloc(sizeof(ElemType) * v->lg - 1);
+	//ElemType* nElems = malloc(sizeof(ElemType) * v->lg - 1);
 	int j = 0;
+	int cp = 0;
 	for (int i = 0; i < v->lg; i++)
 	{
 		if (strcmp(v->elems[i].destination, d) == 0)
 		{
-			nElems[j] = v->elems[i];
-			j++;
+			cp++;
 		}
 	}
+	ElemType* nElems = malloc(sizeof(ElemType) *cp);
+	for (int i = 0; i < v->lg; i++)
+	{
+		if (strcmp(v->elems[i].destination, d) == 0)
+		{
+			nElems[j] = copyOffer(&v->elems[i]);
+			j++;
+		}
+		destroyOffer(&v->elems[i]);
+	}
+	free(v->elems);
 	v->elems = nElems;
 	v->lg = j;
 }
@@ -128,10 +140,12 @@ void filter_by_type(MyVector* v, char* t)
 	{
 		if (strcmp(v->elems[i].type, t) == 0)
 		{
-			nElems[j] = v->elems[i];
+			nElems[j] = copyOffer(&v->elems[i]);
 			j++;
 		}
+		destroyOffer(&v->elems[i]);
 	}
+	free(v->elems);
 	v->elems = nElems;
 	v->lg = j;
 }
@@ -144,77 +158,68 @@ void filter_by_price(MyVector* v, int p)
 	{
 		if (v->elems[i].price==p)
 		{
-			nElems[j] = v->elems[i];
+			nElems[j] = copyOffer(&v->elems[i]);
 			j++;
 		}
+		destroyOffer(&v->elems[i]);
 	}
+	free(v->elems);
 	v->elems = nElems;
 	v->lg = j;
 }
 void changeOffer(ElemType* o1, ElemType* o2)
 {
-	ElemType* aux=malloc(sizeof(ElemType));
-	size_t nrC;
-	aux->date.day = o1->date.day;
-	aux->date.month = o1->date.month;
-	aux->date.year = o1->date.year;
-	aux->price = o1->price;
-	nrC = strlen(o1->type) + 1;
-	aux->type = malloc(sizeof(char) * nrC);
-	strcpy_s(aux->type, nrC, o1->type);
-	nrC = strlen(o1->destination) + 1;
-	aux->destination = malloc(sizeof(char) * nrC);
-	strcpy_s(aux->destination, nrC, o1->destination);
-	//aux=o1
+	ElemType aux;// = malloc(sizeof(ElemType));
+	aux = copyOffer(o1);
+	destroyOffer(o1);
 
-	o1->date.day = o2->date.day;
-	o1->date.month = o2->date.month;
-	o1->date.year = o2->date.year;
-	o1->price = o2->price;
-	nrC = strlen(o2->type) + 1;
-	o1->type = malloc(sizeof(char) * nrC);
-	strcpy_s(o1->type, nrC, o2->type);
-	nrC = strlen(o2->destination) + 1;
-	o1->destination = malloc(sizeof(char) * nrC);
-	strcpy_s(o1->destination, nrC, o2->destination);
-	//o1=o2
+	(*o1) = copyOffer(o2);
+	destroyOffer(o2);
 
-	o2->date.day = aux->date.day;
-	o2->date.month = aux->date.month;
-	o2->date.year = aux->date.year;
-	o2->price = aux->price;
-	nrC = strlen(aux->type) + 1;
-	o2->type = malloc(sizeof(char) * nrC);
-	strcpy_s(o2->type, nrC,aux->type);
-	nrC = strlen(aux->destination) + 1;
-	o2->destination = malloc(sizeof(char) * nrC);
-	strcpy_s(o2->destination, nrC, aux->destination);
-	//o2=aux
+	(*o2) = copyOffer(&aux);
+	destroyOffer(&aux);
 }
-void ascending_order_by_price_and_destination(MyVector* v, char* d)
-{ 
-	filter_by_destination(v, d);
-	ElemType aux;
+MyVector* ascending_order_by_price_and_destination(MyVector* vv, char* d)
+{
+	
+	filter_by_destination(vv, d);
+	sort(vv, crescator);
+	return vv;
+}
+
+MyVector* descending_order_by_price_and_destination(MyVector* vv, char* d)
+{
+	filter_by_destination(vv, d);
+	sort(vv,  descrescator);
+	return vv;
+}
+
+void sort(MyVector* v, int(*compare)(void*, void*))
+{
 	for (int i = 0; i < v->lg - 1; i++) {
 		for (int j = i + 1; j < v->lg; j++) {
-			if (v->elems[i].price > v->elems[j].price) {
+			if (compare(&v->elems[i], &v->elems[j])==1) {
 				changeOffer(&v->elems[i], &v->elems[j]);
+				//_CrtDumpMemoryLeaks();
 			}
 		}
 	}
-
+	
 }
-
-void descending_order_by_price_and_destination(MyVector* v, char* d)
+int crescator(ElemType* a, ElemType* b)
 {
-	filter_by_destination(v, d);
-	Offer aux;
-	for (int i = 0; i < v->lg - 1; i++) {
-		for (int j = i + 1; j <v->lg; j++) {
-			if (v->elems[i].price < v->elems[j].price) {
-				changeOffer(&v->elems[i], &v->elems[j]);
-			}
+		if (a->price > b->price)
+		{
+			return 1;
 		}
-	}
-
+		return 0;
+	
+}
+int descrescator(ElemType* a, ElemType* b)
+{
+		if (a->price < b->price)
+		{
+			return 1;
+		}
+		return 0;
 }

@@ -34,7 +34,7 @@ Offer copyOffer(Offer* o)
 }
 int validate_type(Offer o)
 {
-	if (strcmp(o.type, "city_break") != 0)
+	if (strcmp(o.type, "cityBreak") != 0)
 	{
 		if (strcmp(o.type, "mare") != 0)
 		{

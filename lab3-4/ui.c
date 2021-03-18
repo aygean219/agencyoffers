@@ -5,7 +5,7 @@ void add_ui(MyVector* v)
 	char t[20] = { 0 };
 	char d[20] = { 0 };
 	int p,zi,luna,an;
-	printf("Dati tipul calatoriei (city_break/mare/munte)pe care doriti sa-l adaugati: ");
+	printf("Dati tipul calatoriei (cityBreak/mare/munte)pe care doriti sa-l adaugati: ");
 	scanf_s("%s", &t, (unsigned)_countof(t));
 	printf("Dati destinatia calatoriei pe care doriti sa-l adaugati: ");
 	scanf_s("%s", &d, (unsigned)_countof(d));
@@ -25,7 +25,7 @@ void add_ui(MyVector* v)
 	int ok = 0;
 	if (validate_type(oo) != 0)
 	{
-		printf("Tipul trebuie sa fie :city_break/mare/munte!!!\n");
+		printf("Tipul trebuie sa fie :cityBreak/mare/munte!!!\n");
 		ok = 1;
 	}
 	if (validate_destination(oo) != 0)
@@ -60,6 +60,7 @@ void add_ui(MyVector* v)
 	}
 	else
 	{
+		destroyOffer(&oo);
 		printf("Reincercati,adaugarea nu s-a realizat!!\n");
 	}
 }
@@ -68,7 +69,7 @@ void del_ui(MyVector* v)
 	char t[20] = { 0 };
 	char d[20] = { 0 };
 	int p, zi, luna, an;
-	printf("Dati tipul calatoriei (city_break/mare/munte)pe care doriti sa-l stergeti: ");
+	printf("Dati tipul calatoriei (cityBreak/mare/munte)pe care doriti sa-l stergeti: ");
 	scanf_s("%s", &t, (unsigned)_countof(t));
 	printf("Dati destinatia calatoriei pe care doriti sa-l stergeti: ");
 	scanf_s("%s", &d, (unsigned)_countof(d));
@@ -88,7 +89,7 @@ void del_ui(MyVector* v)
 	int ok = 0;
 	if (validate_type(oo) != 0)
 	{
-		printf("Tipul trebuie sa fie :city_break/mare/munte!!!\n");
+		printf("Tipul trebuie sa fie :cityBreak/mare/munte!!!\n");
 		ok = 1;
 	}
 	if (validate_destination(oo) != 0)
@@ -123,6 +124,7 @@ void del_ui(MyVector* v)
 	}
 	else
 	{
+		destroyOffer(&oo);
 		printf("Reincercati,stergerea nu s-a realizat!!\n");
 	}
 
@@ -132,7 +134,7 @@ void upd_ui(MyVector* v)
 	char t[20] = { 0 };
 	char d[20] = { 0 };
 	int p, zi, luna, an;
-	printf("Dati tipul calatoriei (city_break/mare/munte)pe care doriti sa-l modificati: ");
+	printf("Dati tipul calatoriei (cityBreak/mare/munte)pe care doriti sa-l modificati: ");
 	scanf_s("%s", &t, (unsigned)_countof(t));
 	printf("Dati destinatia calatoriei pe care doriti sa-l modificati: ");
 	scanf_s("%s", &d, (unsigned)_countof(d));
@@ -152,7 +154,7 @@ void upd_ui(MyVector* v)
 	int ok = 0;
 	if (validate_type(oo) != 0)
 	{
-		printf("Tipul trebuie sa fie :city_break/mare/munte!!!\n");
+		printf("Tipul trebuie sa fie :cityBreak/mare/munte!!!\n");
 		ok = 1;
 	}
 	if (validate_destination(oo) != 0)
@@ -185,7 +187,7 @@ void upd_ui(MyVector* v)
 		char t2[20] = { 0 };
 		char d2[20] = { 0 };
 		int p2, zi2, luna2, an2;
-		printf("Dati noul tip al calatoriei (city_break/mare/munte)pe care doriti sa-l modificati: ");
+		printf("Dati noul tip al calatoriei (cityBreak/mare/munte)pe care doriti sa-l modificati: ");
 		scanf_s("%s", &t2, (unsigned)_countof(t2));
 		printf("Dati noua destinatie calatoriei pe care doriti sa-l modificati: ");
 		scanf_s("%s", &d2, (unsigned)_countof(d2));
@@ -205,7 +207,7 @@ void upd_ui(MyVector* v)
 		int ok2 = 0;
 		if (validate_type(oo2) != 0)
 		{
-			printf("Tipul trebuie sa fie :city_break/mare/munte!!!\n");
+			printf("Tipul trebuie sa fie :cityBreak/mare/munte!!!\n");
 			ok2 = 1;
 		}
 		if (validate_destination(oo2) != 0)
@@ -238,12 +240,18 @@ void upd_ui(MyVector* v)
 			update(v, oo, oo2);
 			printf("Modificarea s-a realizat cu succes daca oferta exista!!\n");
 		}
+		else
+		{
+			destroyOffer(&oo2);
+			destroyOffer(&oo);
+			printf("Reincercati,modificarea nu s-a realizat!!\n");
+		}
 	}
 	else
 	{
 		printf("Reincercati,modificarea nu s-a realizat!!\n");
 	}
-
+	
 }
 void filter_by_destination_ui(MyVector* v)
 {	
@@ -257,7 +265,7 @@ void filter_by_destination_ui(MyVector* v)
 	{
 		printf("OFERTA--->Tip: %s ,Destinatie: %s ,Data plecarii: Zi: %d,Luna: %d,An: %d ,Pret: %d $;\n", vv.elems[i].type, vv.elems[i].destination, vv.elems[i].date.day, vv.elems[i].date.month, vv.elems[i].date.year, vv.elems[i].price);
 	}
-	
+	destroy(&vv);
 }
 void filter_by_type_ui(MyVector* v)
 {
@@ -271,6 +279,7 @@ void filter_by_type_ui(MyVector* v)
 	{
 		printf("OFERTA--->Tip: %s ,Destinatie: %s ,Data plecarii: Zi: %d,Luna: %d,An: %d ,Pret: %d $;\n", vv.elems[i].type, vv.elems[i].destination, vv.elems[i].date.day, vv.elems[i].date.month, vv.elems[i].date.year, vv.elems[i].price);
 	}
+	destroy(&vv);
 }
 void filter_by_price_ui(MyVector* v)
 {
@@ -284,33 +293,39 @@ void filter_by_price_ui(MyVector* v)
 	{
 		printf("OFERTA--->Tip: %s ,Destinatie: %s ,Data plecarii: Zi: %d,Luna: %d,An: %d ,Pret: %d $;\n", vv.elems[i].type, vv.elems[i].destination, vv.elems[i].date.day, vv.elems[i].date.month, vv.elems[i].date.year, vv.elems[i].price);
 	}
-
+	destroy(&vv);
 }
 void ascending_order_by_price_and_destination_ui(MyVector* v)
 {
-	MyVector vv = copyList(v);
+	MyVector vvv = copyList(v);
 	char d[20] = { 0 };
 	printf("Dati destinatia calatoriilor pe care doriti sa le vedeti ordonate crescator: ");
 	scanf_s("%s", &d, (unsigned)_countof(d));
 	printf("Ofertele sunt urmatoarele : \n");
-	ascending_order_by_price_and_destination(&vv, d);
-	for (int i = 0; i < vv.lg; i++)
+	MyVector* vv;
+	vv=ascending_order_by_price_and_destination(&vvv, d);
+	for (int i = 0; i < vv->lg; i++)
 	{
-		printf("OFERTA--->Tip: %s ,Destinatie: %s ,Data plecarii: Zi: %d,Luna: %d,An: %d ,Pret: %d $;\n", vv.elems[i].type, vv.elems[i].destination, vv.elems[i].date.day, vv.elems[i].date.month, vv.elems[i].date.year, vv.elems[i].price);
+		printf("OFERTA--->Tip: %s ,Destinatie: %s ,Data plecarii: Zi: %d,Luna: %d,An: %d ,Pret: %d $;\n", vv->elems[i].type, vv->elems[i].destination, vv->elems[i].date.day, vv->elems[i].date.month, vv->elems[i].date.year, vv->elems[i].price);
 	}
+	destroy(&vvv);
+	destroy(vv);
 }
 void descending_order_by_price_and_destination_ui(MyVector* v)
 {
-	MyVector vv = copyList(v);
+	MyVector vvv = copyList(v);
 	char d[20] = { 0 };
 	printf("Dati destinatia calatoriilor pe care doriti sa le vedeti ordonate descrescator: ");
 	scanf_s("%s", &d, (unsigned)_countof(d));
 	printf("Ofertele sunt urmatoarele : \n");
-	descending_order_by_price_and_destination(&vv, d);
-	for (int i = 0; i < vv.lg; i++)
+	MyVector* vv;
+	vv = descending_order_by_price_and_destination(&vvv, d);
+	for (int i = 0; i < vv->lg; i++)
 	{
-		printf("OFERTA--->Tip: %s ,Destinatie: %s ,Data plecarii: Zi: %d,Luna: %d,An: %d ,Pret: %d $;\n", vv.elems[i].type, vv.elems[i].destination, vv.elems[i].date.day, vv.elems[i].date.month, vv.elems[i].date.year, vv.elems[i].price);
+		printf("OFERTA--->Tip: %s ,Destinatie: %s ,Data plecarii: Zi: %d,Luna: %d,An: %d ,Pret: %d $;\n", vv->elems[i].type, vv->elems[i].destination, vv->elems[i].date.day, vv->elems[i].date.month, vv->elems[i].date.year, vv->elems[i].price);
 	}
+	destroy(&vvv);
+	destroy(vv);
 }
 void meniu()
 {
@@ -327,9 +342,22 @@ void meniu()
 }
 void show_agency(MyVector* v)
 {
+	printf("TIP--------------------DESTINATIE------------ZI------------LUNA---------------AN---------------PRET\n");
 	for (int i = 0; i < v->lg; i++)
 	{
-		printf("OFERTA--->Tip: %s ,Destinatie: %s ,Data plecarii: Zi: %d,Luna: %d,An: %d ,Pret: %d $;\n", v->elems[i].type, v->elems[i].destination, v->elems[i].date.day, v->elems[i].date.month, v->elems[i].date.year, v->elems[i].price);
+		if (strcmp(v->elems[i].type, "cityBreak") != 0) {
+			if (strcmp(v->elems[i].type, "mare") == 0) {
+				printf("%s                     %s               %d               %d               %d              %d$\n", v->elems[i].type, v->elems[i].destination, v->elems[i].date.day, v->elems[i].date.month, v->elems[i].date.year, v->elems[i].price);
+			}
+			else
+			{
+				printf("%s                   %s               %d               %d               %d              %d$\n", v->elems[i].type, v->elems[i].destination, v->elems[i].date.day, v->elems[i].date.month, v->elems[i].date.year, v->elems[i].price);
+			}
+			}
+		else
+		{
+			printf("%s               %s               %d               %d               %d              %d$\n", v->elems[i].type, v->elems[i].destination, v->elems[i].date.day, v->elems[i].date.month, v->elems[i].date.year, v->elems[i].price);
+		}
 	}
 }
 void aplicatie(MyVector* v)
