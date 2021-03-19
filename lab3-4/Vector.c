@@ -169,7 +169,7 @@ void filter_by_price(MyVector* v, int p)
 }
 void changeOffer(ElemType* o1, ElemType* o2)
 {
-	ElemType aux;// = malloc(sizeof(ElemType));
+	ElemType aux;
 	aux = copyOffer(o1);
 	destroyOffer(o1);
 

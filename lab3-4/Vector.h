@@ -87,8 +87,19 @@ void filter_by_price(MyVector* v, int p);
 */
 void changeOffer(ElemType* o1, ElemType* o2);
 
+/*Compare 2 elements
+@param: a,b(ElemType)
+*/
 int crescator(ElemType* a, ElemType* b);
+
+/*Compare 2 elements
+@param: a,b(ElemType)
+*/
 int descrescator(ElemType* a, ElemType* b);
+
+/*Sort the list according to a function(ascending/descending)
+* @param::vector(MyVector),function(int)
+*/
 void sort(MyVector* v, int(*compare)(void*, void*));
 
 /*Ascending order by price 
